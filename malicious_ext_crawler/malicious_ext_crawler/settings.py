@@ -1,4 +1,4 @@
-# Scrapy settings for posttscrape project
+# Scrapy settings for malicious_ext_crawler project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -7,14 +7,14 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'posttscrape'
+BOT_NAME = 'malicious_ext_crawler'
 
-SPIDER_MODULES = ['posttscrape.spiders']
-NEWSPIDER_MODULE = 'posttscrape.spiders'
+SPIDER_MODULES = ['malicious_ext_crawler.spiders']
+NEWSPIDER_MODULE = 'malicious_ext_crawler.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'posttscrape (+http://www.yourdomain.com)'
+#USER_AGENT = 'malicious_ext_crawler (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -45,13 +45,13 @@ ROBOTSTXT_OBEY = True
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'posttscrape.middlewares.PosttscrapeSpiderMiddleware': 543,
+#    'malicious_ext_crawler.middlewares.MaliciousExtCrawlerSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'posttscrape.middlewares.PosttscrapeDownloaderMiddleware': 543,
+#    'malicious_ext_crawler.middlewares.MaliciousExtCrawlerDownloaderMiddleware': 543,
 #}
 
 # Enable or disable extensions
@@ -63,7 +63,7 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 #ITEM_PIPELINES = {
-#    'posttscrape.pipelines.PosttscrapePipeline': 300,
+#    'malicious_ext_crawler.pipelines.MaliciousExtCrawlerPipeline': 300,
 #}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
