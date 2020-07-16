@@ -136,3 +136,8 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+# Exclude exported data
+selenium_project/export_dataframe.csv
+malicious_ext_crawler/malicious_ext_crawler/export_dataframe.csv
+malicious_ext_crawler/extensions.json
