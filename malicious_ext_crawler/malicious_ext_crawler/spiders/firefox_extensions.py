@@ -4,11 +4,13 @@ from scrapy_selenium import SeleniumRequest
 import pandas as pd
 import re
 
+import csv
+import codecs
 
 
 #Class for defining how your spider is gonna work~!
-class ExtensionsSpider(scrapy.Spider):
-    name = 'extensions'
+class FirefoxExtensions(scrapy.Spider):
+    name = 'firefox_extensions'
     # start_urls = [
         
     #     # 'https://chrome.google.com/webstore/search/trezor?hl=en&_category=extensions'
@@ -20,12 +22,22 @@ class ExtensionsSpider(scrapy.Spider):
 
 
     def start_requests(self):
-        keywords = 'ledger'
-        url_s = 'https://addons.mozilla.org/en-US/firefox/search/?q=%s&type=extension' % keywords
-        urls = [
-            url_s
-            # 'http://quotes.toscrape.com/page/2/',
-        ]
+        # List of urls for crawling
+        urls = []
+        # READ and GENERATE urls with keywords 
+        # with open('/Users/thanhtrv/Documents/work/2020/winter_research_2020/malicious_browser_extensions_scrapy/malicious_ext_crawler/malicious_ext_crawler/spiders/keywords.csv', 'rb') as csv_file:
+        #     data = csv.reader(codecs.iterdecode(csv_file, 'utf-8'))
+        #     for row_keyword in data:
+        #         combined_keyword_url = 'https://addons.mozilla.org/en-US/firefox/search/?q=%s&type=extension' % string(row_keyword)
+        #         urls.append(combined_keyword_url)
+                # print("THANHTHANHTHANH%s  ") % row_keyword
+        
+
+        keywords = ['trezor', 'jaxx']
+        for keyword in keywords:
+            combined_keyword_url = 'https://addons.mozilla.org/en-US/firefox/search/?q=%s&type=extension' % keyword
+            urls.append(combined_keyword_url)
+        
         for url in urls:
             yield scrapy_selenium.SeleniumRequest(url=url, callback=self.parse)
 
@@ -76,9 +88,13 @@ class ExtensionsSpider(scrapy.Spider):
             if details_link is not None:
                 details_link = response.urljoin(details_link)
                 # yield scrapy.Request(next_page, callback=self.parse)
-                yield scrapy_selenium.SeleniumRequest(url=details_link, callback=self.parse_extension, cb_kwargs={'name':name, 'user_numbers' :user_numbers[0], 'rating' :rating[0], 'creator' :creator})
-            
-
+                yield scrapy_selenium.SeleniumRequest(url=details_link, callback=self.parse_extension, cb_kwargs={'name':name, 'user_numbers' :user_numbers[0], 'rating' :float(rating[0]), 'creator' :creator})
+        
+        # NEXT PAGE and repeat parse method.
+        next_page = response.css('a.Button.Button--cancel.Paginate-item.Paginate-item--next::attr("href")').get()
+        if next_page is not None:
+            next_page = response.urljoin(next_page)
+            yield scrapy_selenium.SeleniumRequest(url=next_page, callback=self.parse)
             # yield {
             #     'name': name,
             #     'user_numbers': user_numbers[0],
