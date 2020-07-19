@@ -52,7 +52,7 @@ class FirefoxExtensions(scrapy.Spider):
             text_rating = extension.css('.visually-hidden::text').get()
             # text_rating  = extension.find_element_by_css_selector('.visually-hidden').text
             rating = re.findall("[-+]?\d*\.?\d+|\d+", text_rating)
-            
+
             if len(rating) == 0:
                 rating = [0]
 
@@ -108,13 +108,61 @@ class FirefoxExtensions(scrapy.Spider):
 
 
     def parse_extension(self, response, name, user_numbers, rating, creator):
-        # response.css('title::text').get()
+        last_updated = response.css('dd.Definition-dd.AddonMoreInfo-last-updated::text').get()
+        previous_data = {
+            "name": name,
+            "user_numbers": user_numbers,
+            "rating": rating,
+            "creator": creator,
+            'last_updated': last_updated
+        }
+
+        # PS: Not every extension has reviews
+        reviews_link = response.css('a.AddonMeta-reviews-title-link::attr("href")').get()
+        if reviews_link is not None:
+            reviews_link = response.urljoin(reviews_link)
+            yield  scrapy_selenium.SeleniumRequest(url=reviews_link, callback = self.parse_reviews, cb_kwargs={'previous_data':previous_data})
+        
+        else:
+            # For extensions that dont have reviews (no reviews_links)
+            yield {
+            'platform': "firefox",
+            'name': previous_data["name"],
+            'rating': previous_data["rating"],
+            'creator': previous_data["creator"],
+            'last_updated': previous_data["last_updated"],
+            'reviews': "NaN"
+        }
+        # yield {
+        #     'platform': "firefox",
+        #     'name': previous_data["name"]
+        # }
+
+
+        # yield {
+        #     'platform': "firefox",
+        #     'name': name,
+        #     'rating': rating,
+        #     'creator': creator,
+        #     'reviews_link': reviews_link,
+        #     'last_updated': last_updated
+        # }
+
+    def parse_reviews(self, response, previous_data):
+        reviews_list = []
+        reviews = response.css('li')
+        # stupid bug s and without s
+        for review in reviews:
+            content = review.css('div::text').get()
+            # content = review.xpath('//*[@id="react-view"]/div/div/div/div[2]/div/section/div/ul/li[1]/div/div/div/section/div/div/div::text').get()
+            if content is not None:
+                reviews_list.append(content)
         
         yield {
             'platform': "firefox",
-            'name': name,
-            'rating': rating,
-            'creator': creator,
-            # 'details_link': details_link,
-            'last_updated': response.css('dd.Definition-dd.AddonMoreInfo-last-updated::text').get()
+            'name': previous_data["name"],
+            'rating': previous_data["rating"],
+            'creator': previous_data["creator"],
+            'last_updated': previous_data["last_updated"],
+            'reviews': reviews_list
         }
