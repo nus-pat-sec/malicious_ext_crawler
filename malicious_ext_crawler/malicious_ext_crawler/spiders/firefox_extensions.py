@@ -10,45 +10,30 @@ import codecs
 
 #Class for defining how your spider is gonna work~!
 class FirefoxExtensions(scrapy.Spider):
+    # Name of this spider
     name = 'firefox_extensions'
-    # start_urls = [
-        
-    #     # 'https://chrome.google.com/webstore/search/trezor?hl=en&_category=extensions'
-    # ]
 
-    # for url in urls:
-    #         yield scrapy.Request(url=url, callback=self.parse)
-
-
-
+    # PREPARATION for Start Requests
+    # before parsing
     def start_requests(self):
         # List of urls for crawling
         urls = []
+        # Path to keywords.csv
+        path_keywords_csv = '/Users/thanhtrv/Documents/work/2020/winter_research_2020/malicious_browser_extensions_scrapy/malicious_ext_crawler/malicious_ext_crawler/spiders/keywords.csv'
         # READ and GENERATE urls with keywords 
-        # with open('/Users/thanhtrv/Documents/work/2020/winter_research_2020/malicious_browser_extensions_scrapy/malicious_ext_crawler/malicious_ext_crawler/spiders/keywords.csv', 'rb') as csv_file:
-        #     data = csv.reader(codecs.iterdecode(csv_file, 'utf-8'))
-        #     for row_keyword in data:
-        #         combined_keyword_url = 'https://addons.mozilla.org/en-US/firefox/search/?q=%s&type=extension' % string(row_keyword)
-        #         urls.append(combined_keyword_url)
-                # print("THANHTHANHTHANH%s  ") % row_keyword
-        
-
-        keywords = ['trezor', 'jaxx']
-        for keyword in keywords:
-            combined_keyword_url = 'https://addons.mozilla.org/en-US/firefox/search/?q=%s&type=extension' % keyword
-            urls.append(combined_keyword_url)
-        
+        with open(path_keywords_csv, mode='r', encoding='utf-8-sig') as csv_file:
+            data = csv.reader(csv_file)
+            for row_keyword in data:
+                combined_keyword_url = 'https://addons.mozilla.org/en-US/firefox/search/?q=%s&type=extension' % row_keyword[0]
+                urls.append(combined_keyword_url)
+        # SEND and REQUEST the urls using selenium driver/chrome
         for url in urls:
             yield scrapy_selenium.SeleniumRequest(url=url, callback=self.parse)
 
-    # yield SeleniumRequest(url=url, callback=self.parse_result)
-    # Loop through the urls to retrieve the expected data
-    # for url in urls:
-    #         yield scrapy.Request(url=url, callback=self.parse)
-
-    # parsing the data from pages from the list of url
+    # PARSING the data from pages
+    # @response :response from selenium requests
     def parse(self, response):
-        extension_list = []
+        # get full response
         extensions = response.css('.SearchResult')
         # test = response.request.meta['driver'].find_elements_by_class_name('SearchResult').text
         # response.request.meta['driver'].title
