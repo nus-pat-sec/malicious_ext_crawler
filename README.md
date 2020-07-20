@@ -3,6 +3,10 @@
 
 Malicious browser extensions crawler is a Python-based crawler
 
+## Notes
+
+venv is recommended to be used to run project
+
 ## Installation
 
 ### Require library
