@@ -141,3 +141,5 @@ cython_debug/
 selenium_project/export_dataframe.csv
 malicious_ext_crawler/malicious_ext_crawler/export_dataframe.csv
 malicious_ext_crawler/extensions.json
+
+malicious_ext_crawler/.DS_Store

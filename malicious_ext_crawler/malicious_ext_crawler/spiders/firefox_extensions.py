@@ -35,41 +35,24 @@ class FirefoxExtensions(scrapy.Spider):
     def parse(self, response):
         # get full response
         extensions = response.css('.SearchResult')
-        # test = response.request.meta['driver'].find_elements_by_class_name('SearchResult').text
-        # response.request.meta['driver'].title
-        # print(response.request.meta['driver'].title)
-        # name_extension = response.css('SearchResult::text')
-        # page = response.css('.a-na-d-w').extract()
-        # extensions = response.request.meta['driver'].find_elements_by_class_name('SearchResult')
-        # print(response.request.meta['driver'].title)
+        # get extension details
         for extension in extensions:
             # Extract metadata of each extensions
-            # name = extension.find_element_by_css_selector('.SearchResult-link').text
             name = extension.css('.SearchResult-link::text').get()
             text_user_numbers = extension.css('.SearchResult-users-text::text').get()
-            # text_user_numbers = extension.find_element_by_css_selector('.SearchResult-users-text').text
+            # get user numbers 
             user_numbers = re.findall("[-+]?\d*\,?\d+|\d+", text_user_numbers)
             text_rating = extension.css('.visually-hidden::text').get()
             # text_rating  = extension.find_element_by_css_selector('.visually-hidden').text
             rating = re.findall("[-+]?\d*\.?\d+|\d+", text_rating)
-
+            # equal to 0 if there is no valid rating
             if len(rating) == 0:
                 rating = [0]
 
             creator = extension.css('h3.SearchResult-author.SearchResult--meta-section::text').get()
             
-            # text_user_numbers = extension.find_element_by_css_selector('.SearchResult-users-text').text
-            # user_numbers = re.findall("[-+]?\d*\,?\d+|\d+", text_user_numbers)
-            
-            # details = extension.find_element_by_css_selector('.SearchResult-link')
-            # link = details.find_element_by_
             details_link = extension.css('.SearchResult-link::attr(href)').get()
-            # ext_item = {
-            #     'name': name,
-            #     'user_numbers': user_numbers[0],
-            #     'rating': rating[0],
-            #     'link': details
-            # }
+
             if details_link is not None:
                 details_link = response.urljoin(details_link)
                 # yield scrapy.Request(next_page, callback=self.parse)
@@ -80,35 +63,12 @@ class FirefoxExtensions(scrapy.Spider):
         if next_page is not None:
             next_page = response.urljoin(next_page)
             yield scrapy_selenium.SeleniumRequest(url=next_page, callback=self.parse)
-            # yield {
-            #     'name': name,
-            #     'user_numbers': user_numbers[0],
-            #     'rating': rating[0],
-            #     'details_link': details_link
-            # }
-            # ext_item = {
-            #     'name': name,
-            #     'user_numbers': user_numbers[0],
-            #     'rating': rating[0],
-            #     'details_link': details_link
-            # }
-            # extension_list.append(ext_item)
-        # yield {'body': name}
 
-
-        # CREATE DATAFRAME for storing data
-        # df = pd.DataFrame(extension_list)       
-        # # with open('test', 'wb') as f:
-        # #     f.write()
-        # # # filename = 'test-%s.html' % page
-        # # # with open(filename, 'wb') as f:
-        # # #     f.write(response.body)
-        # # df = pd.DataFrame(test)
-        # df.to_csv (r'/Users/thanhtrv/Documents/work/2020/winter_research_2020/malicious_browser_extensions_scrapy/malicious_ext_crawler/malicious_ext_crawler/export_dataframe.csv', index = False, header=True)
-
-
+    # PARSING extensions
+    # @parameters take parameters that are parsed data from previous request
     def parse_extension(self, response, name, user_numbers, rating, creator):
         last_updated = response.css('dd.Definition-dd.AddonMoreInfo-last-updated::text').get()
+        # store previous parsed data as a dictionary
         previous_data = {
             "name": name,
             "user_numbers": user_numbers,
@@ -129,25 +89,14 @@ class FirefoxExtensions(scrapy.Spider):
             'platform': "firefox",
             'name': previous_data["name"],
             'rating': previous_data["rating"],
+            'user_numbers': previous_data["user_numbers"],
             'creator': previous_data["creator"],
             'last_updated': previous_data["last_updated"],
-            'reviews': "NaN"
+            'reviews': [] #as a empty list if there is no valid reviews
         }
-        # yield {
-        #     'platform': "firefox",
-        #     'name': previous_data["name"]
-        # }
 
-
-        # yield {
-        #     'platform': "firefox",
-        #     'name': name,
-        #     'rating': rating,
-        #     'creator': creator,
-        #     'reviews_link': reviews_link,
-        #     'last_updated': last_updated
-        # }
-
+    # PARSING reviews from a extension
+    # @parameters take previous parsed data as an argument
     def parse_reviews(self, response, previous_data):
         reviews_list = []
         reviews = response.css('li')
@@ -157,12 +106,17 @@ class FirefoxExtensions(scrapy.Spider):
             # content = review.xpath('//*[@id="react-view"]/div/div/div/div[2]/div/section/div/ul/li[1]/div/div/div/section/div/div/div::text').get()
             if content is not None:
                 reviews_list.append(content)
-        
+
+        # Export data with reviews list
         yield {
             'platform': "firefox",
             'name': previous_data["name"],
             'rating': previous_data["rating"],
+            'user_numbers': previous_data["user_numbers"],
             'creator': previous_data["creator"],
             'last_updated': previous_data["last_updated"],
-            'reviews': reviews_list
+            'reviews': reviews_list #as a empty list if there is no valid reviews
         }
+
+
+        
