@@ -9,7 +9,7 @@ venv is recommended to be used to run project
 
 ## Installation
 
-### Require library
+### Required library
 
 ```bash
 import scrapy
