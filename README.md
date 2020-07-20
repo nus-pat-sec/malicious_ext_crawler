@@ -5,20 +5,20 @@ Malicious browser extensions crawler is a Python-based crawler
 
 ## Installation
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
+### Require library
 
 ```bash
-pip install foobar
+import scrapy
+import selenium
+import scrapy_selenium
 ```
 
 ## Usage
+### Json crawler
 
 ```python
-import foobar
+scrapy crawl firefox_extensions -o extensions.json
 
-foobar.pluralize('word') # returns 'words'
-foobar.pluralize('goose') # returns 'geese'
-foobar.singularize('phenomena') # returns 'phenomenon'
 ```
 
 ## Contributing
