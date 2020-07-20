@@ -68,13 +68,15 @@ class FirefoxExtensions(scrapy.Spider):
     # @parameters take parameters that are parsed data from previous request
     def parse_extension(self, response, name, user_numbers, rating, creator):
         last_updated = response.css('dd.Definition-dd.AddonMoreInfo-last-updated::text').get()
+        reviews_list = [] # Store reviews list and void repeating in parse reviews
         # store previous parsed data as a dictionary
         previous_data = {
             "name": name,
             "user_numbers": user_numbers,
             "rating": rating,
             "creator": creator,
-            'last_updated': last_updated
+            "last_updated": last_updated,
+            "reviews_list": reviews_list
         }
 
         # PS: Not every extension has reviews
@@ -98,25 +100,37 @@ class FirefoxExtensions(scrapy.Spider):
     # PARSING reviews from a extension
     # @parameters take previous parsed data as an argument
     def parse_reviews(self, response, previous_data):
-        reviews_list = []
         reviews = response.css('li')
         # stupid bug s and without s
         for review in reviews:
-            content = review.css('div::text').get()
+            # content = review.css('div::text').get()
+            temp_css_content_with_br = review.css('div.ShowMoreCard-contents')
+            # <br> HANDLER including parsing reviews and eliminating <br>
+            content = temp_css_content_with_br.xpath('string(.)').get()
             # content = review.xpath('//*[@id="react-view"]/div/div/div/div[2]/div/section/div/ul/li[1]/div/div/div/section/div/div/div::text').get()
             if content is not None:
-                reviews_list.append(content)
+                previous_data["reviews_list"].append(content)
 
-        # Export data with reviews list
-        yield {
-            'platform': "firefox",
-            'name': previous_data["name"],
-            'rating': previous_data["rating"],
-            'user_numbers': previous_data["user_numbers"],
-            'creator': previous_data["creator"],
-            'last_updated': previous_data["last_updated"],
-            'reviews': reviews_list #as a empty list if there is no valid reviews
-        }
+        # NEXT PAGE and repeat parse method.
+        next_page_reviews = response.css('a.Button.Button--cancel.Paginate-item.Paginate-item--next::attr("href")').get()
+        if next_page_reviews is not None:
+            next_page_reviews = response.urljoin(next_page_reviews)
+            yield scrapy_selenium.SeleniumRequest(url=next_page_reviews, callback=self.parse_reviews, cb_kwargs={'previous_data':previous_data})
+        else:
+            # Avoid repeating when do paging parse why???? maybe after selenium request and callback, it creates two processes, one for call def parse_reviews ,one for continuing 
+            # processing the next piece of code.
+            # Export data with reviews list
+            yield {
+                'platform': "firefox",
+                'name': previous_data["name"],
+                'rating': previous_data["rating"],
+                'user_numbers': previous_data["user_numbers"],
+                'creator': previous_data["creator"],
+                'last_updated': previous_data["last_updated"],
+                'reviews': previous_data["reviews_list"] #as a empty list if there is no valid reviews
+            }
+        
+        
 
 
         
