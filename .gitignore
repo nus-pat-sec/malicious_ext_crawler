@@ -145,4 +145,4 @@ malicious_ext_crawler/meta_extensions.json
 
 malicious_ext_crawler/.DS_Store
 # Exclude the keywords.csv
-malicious_ext_crawler/malicious_ext_crawler/spiders/keywords.csv
+malicious_ext_crawler/spiders/keywords.csv

@@ -6,6 +6,8 @@ import re
 
 import csv
 import codecs
+from datetime import datetime
+import dateutil.parser as dparser
 
 
 #Class for defining how your spider is gonna work~!
@@ -70,6 +72,12 @@ class FirefoxExtensionsMeta(scrapy.Spider):
     # @parameters take parameters that are parsed data from previous request
     def parse_extension(self, response, name, user_numbers, rating, creator, key):
         last_updated = response.css('dd.Definition-dd.AddonMoreInfo-last-updated::text').get()
+        # extracted_last_updated = re.search(r'\d{4} \d{2} \d{2})', last_updated)
+        # formated_last_updated = datetime.strptime(match.group(), '%Y-%m-%d').date()
+        shortened_last_updated = last_updated.split('(', 1)[1].split(')')[0]
+        formated_last_updated = dparser.parse(shortened_last_updated,fuzzy=True)
+        
+        
         reviews_list = [] # Store reviews list and void repeating in parse reviews
         # store previous parsed data as a dictionary
         previous_data = {
@@ -78,7 +86,7 @@ class FirefoxExtensionsMeta(scrapy.Spider):
             "user_numbers": user_numbers,
             "rating": rating,
             "creator": creator,
-            "last_updated": last_updated,
+            "last_updated": formated_last_updated,
             "reviews_list": reviews_list
         }
 
