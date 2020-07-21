@@ -52,11 +52,13 @@ class FirefoxExtensions(scrapy.Spider):
             creator = extension.css('h3.SearchResult-author.SearchResult--meta-section::text').get()
             
             details_link = extension.css('.SearchResult-link::attr(href)').get()
+            # key_id of extension
+            key = re.search('firefox/addon/(.+?)/', details_link).group(1)
 
             if details_link is not None:
                 details_link = response.urljoin(details_link)
                 # yield scrapy.Request(next_page, callback=self.parse)
-                yield scrapy_selenium.SeleniumRequest(url=details_link, callback=self.parse_extension, cb_kwargs={'name':name, 'user_numbers' :user_numbers[0], 'rating' :float(rating[0]), 'creator' :creator})
+                yield scrapy_selenium.SeleniumRequest(url=details_link, callback=self.parse_extension, cb_kwargs={'name':name, 'user_numbers' :user_numbers[0], 'rating' :float(rating[0]), 'creator' :creator, 'key' :key})
         
         # NEXT PAGE and repeat parse method.
         next_page = response.css('a.Button.Button--cancel.Paginate-item.Paginate-item--next::attr("href")').get()
@@ -66,11 +68,12 @@ class FirefoxExtensions(scrapy.Spider):
 
     # PARSING extensions
     # @parameters take parameters that are parsed data from previous request
-    def parse_extension(self, response, name, user_numbers, rating, creator):
+    def parse_extension(self, response, name, user_numbers, rating, creator, key):
         last_updated = response.css('dd.Definition-dd.AddonMoreInfo-last-updated::text').get()
         reviews_list = [] # Store reviews list and void repeating in parse reviews
         # store previous parsed data as a dictionary
         previous_data = {
+            "key": key,
             "name": name,
             "user_numbers": user_numbers,
             "rating": rating,
@@ -89,6 +92,7 @@ class FirefoxExtensions(scrapy.Spider):
             # For extensions that dont have reviews (no reviews_links)
             yield {
             'platform': "firefox",
+            'key': previous_data["key"],
             'name': previous_data["name"],
             'rating': previous_data["rating"],
             'user_numbers': previous_data["user_numbers"],
@@ -122,6 +126,7 @@ class FirefoxExtensions(scrapy.Spider):
             # Export data with reviews list
             yield {
                 'platform': "firefox",
+                'key': previous_data["key"],
                 'name': previous_data["name"],
                 'rating': previous_data["rating"],
                 'user_numbers': previous_data["user_numbers"],
