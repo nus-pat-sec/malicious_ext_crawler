@@ -152,3 +152,4 @@ malicious_ext_crawler/meta_extensions.csv
 malicious_ext_crawler/malicious_ext_crawler/spiders/keywords.csv
 malicious_ext_crawler/malicious_ext_crawler/spiders/keywords.csv
 malicious_ext_crawler/malicious_ext_crawler/spiders/medium_keywords.csv
+malicious_ext_crawler/final_extensions.json

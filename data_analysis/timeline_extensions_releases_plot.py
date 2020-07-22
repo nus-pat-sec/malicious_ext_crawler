@@ -50,7 +50,7 @@ plt.bar(x_units, y_units, tick_label=months_label,
         # print(date_type.year)
 plt.xlabel('Last 7 months')
 plt.ylabel('The number of "potentially malicious" browser extensions')
-plt.title('2020 the number of "potentially malicious" browser extensions')
+plt.title('2020 the number of "potentially malicious" browser extensions, Firefox')
 
 plt.show()
     # print(data_dict[0])
