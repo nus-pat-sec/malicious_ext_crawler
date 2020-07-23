@@ -153,3 +153,12 @@ malicious_ext_crawler/malicious_ext_crawler/spiders/keywords.csv
 malicious_ext_crawler/malicious_ext_crawler/spiders/keywords.csv
 # malicious_ext_crawler/malicious_ext_crawler/spiders/medium_keywords.csv
 malicious_ext_crawler/final_extensions.json
+data_analysis/cleaned_data.csv
+data_analysis/cleaned_data.json
+data_analysis/combined.json
+data_analysis/full_ext.json
+malicious_ext_crawler/.DS_Store
+data_analysis/fancy_cleaned_data.csv
+.DS_Store
+malicious_ext_crawler/.DS_Store
+malicious_ext_crawler/malicious_ext_crawler/.DS_Store
