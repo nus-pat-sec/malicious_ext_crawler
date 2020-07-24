@@ -162,3 +162,4 @@ data_analysis/fancy_cleaned_data.csv
 .DS_Store
 malicious_ext_crawler/.DS_Store
 malicious_ext_crawler/malicious_ext_crawler/.DS_Store
+data_analysis/cleaned_seven_months_data.csv

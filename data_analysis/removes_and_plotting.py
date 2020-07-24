@@ -87,7 +87,7 @@ def processing(input_file):
 x_units = [1, 2, 3, 4, 5, 6, 7]
 y_1 = processing("cleaned_data.json")
 # export csv
-export_csv(y_1[1],"cleaned_data.csv")
+export_csv(y_1[1],"cleaned_seven_months_data.csv")
 y_2 = processing("combined.json")
 
 f = plt.figure(1)

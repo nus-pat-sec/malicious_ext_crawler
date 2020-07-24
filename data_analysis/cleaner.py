@@ -5,6 +5,13 @@ import matplotlib.pyplot as plt
 import re
 import csv
 
+# find substring without case sensitives
+def f_wo_case(substring, main_string):
+
+    if re.search(substring, main_string, re.IGNORECASE):
+        return True
+
+    return False
 
 cleaned_data = []
 with open('combined.json') as json_file:
@@ -15,22 +22,29 @@ with open('combined.json') as json_file:
     for each in data_dict:
 
         # date_type = dparser.parse(each["last_updated"],fuzzy=True)
+        ####### Using key filters
         key = each["key"]
-        # a_string.find(substring1)
-        # if ((key.find("coin") != -1 or key.find("wallet") != -1 or key.find("exchange") or key.find("token") or key.find("ether") or key.find("currency")) != -1) and key.find("theme") == -1):
-        # if (re.search('coin', name, re.IGNORECASE) == True or re.search('wallet', name, re.IGNORECASE) == True):
-        # print(re.search('coin', name, re.IGNORECASE))
-        
-        # filter_words = ['wallet', 'coin']
-        # for word in filter_words:
-        #     if (word.lower() in name.lower()):
-        common_words_filters = (key.find("coin") != -1 or key.find("wallet") != -1 or key.find("exchange") != -1 or key.find("token") != -1 or \
+        common_words_filters_key = (key.find("coin") != -1 or key.find("wallet") != -1 or key.find("exchange") != -1 or key.find("token") != -1 or \
                 key.find("ether") != -1 or key.find("currency") != -1 or key.find("exchange") != -1 or key.find("crypto") != -1 or \
-                key.find("chain") != -1)
+                key.find("chain") != -1 or key.find("cash") != -1 or key.find("transaction") != -1 or key.find("bank") != -1 or \
+                key.find("pay") != -1 or key.find("money") != -1 or key.find("card") != -1 or key.find("card") != -1 or \
+                key.find("binance") != -1 or key.find("ledger") != -1 or key.find("ledger") != -1 or key.find("trezor") != -1 or key.find("trezor") != -1 )
 
-        filters = ( common_words_filters and (key.find("theme") == -1) )
+        filters_key = ( common_words_filters_key and (key.find("theme") == -1) )
+
+        ######## Using name filters
+        name = each["name"]     
+        # Reason for excluding them because Firefox has a bac search engine that cannt effectively classify theme and extensions
+        common_words_filters_name = (f_wo_case("coin", name) == True or f_wo_case("wallet", name) == True or f_wo_case("exchange", name) == True or f_wo_case("token", name) == True or \
+                f_wo_case("ether", name) == True or f_wo_case("currency", name) == True or f_wo_case("exchange", name) == True or f_wo_case("crypto", name) == True or \
+                f_wo_case("chain", name) == True or f_wo_case("cash", name) == True or f_wo_case("transaction", name) == True or f_wo_case("bank", name) == True or \
+                f_wo_case("pay", name) == True or f_wo_case("money", name) == True or f_wo_case("card", name) == True or f_wo_case("bit", name) == True or \
+                f_wo_case("nance", name) == True or f_wo_case("ledger", name) == True or f_wo_case("trezor", name) == True) 
+
+        filters_name = ( common_words_filters_name and (f_wo_case("theme", name) == False) )
         
-        
+        ####### combining name and key filters by OR
+        filters = filters_key or filters_name
         
         if (filters):
             cleaned_data.append(each)
