@@ -91,15 +91,15 @@ class FirefoxExtensions(scrapy.Spider):
         else:
             # For extensions that dont have reviews (no reviews_links)
             yield {
-            'platform': "firefox",
-            'key': previous_data["key"],
-            'name': previous_data["name"],
-            'rating': previous_data["rating"],
-            'user_numbers': previous_data["user_numbers"],
-            'creator': previous_data["creator"],
-            'last_updated': previous_data["last_updated"],
-            'reviews': [] #as a empty list if there is no valid reviews
-        }
+                'platform': "firefox",
+                'key': previous_data["key"],
+                'name': previous_data["name"],
+                'rating': previous_data["rating"],
+                'user_numbers': previous_data["user_numbers"],
+                'creator': previous_data["creator"],
+                'last_updated': previous_data["last_updated"],
+                'reviews': [] #as a empty list if there is no valid reviews
+            }
 
     # PARSING reviews from a extension
     # @parameters take previous parsed data as an argument
