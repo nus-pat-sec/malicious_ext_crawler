@@ -12,10 +12,11 @@ class ChromeExtensions(scrapy.Spider):
     name = 'chrome_extensions'
     start_urls = ['https://chrome.google.com/webstore/search/ledger?hl=en']
     headers = {
-        "Accept": "*/*",
+        "Accept": "application/json",
         "Accept-Encoding": "gzip, deflate, br",
         "Content-Length": "0",
-
+        "Cache-Control": "no-cache",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36",
     }
 
     def parse(self, response):
@@ -25,9 +26,20 @@ class ChromeExtensions(scrapy.Spider):
         yield request
 
     def parse_api(self, response):
-        raw_data = response.body
-        data = json.load(raw_data)
-        
-        yield {
-            data
-        }
+        raw_data = response.body.decode("utf-8")
+        removed = raw_data.replace(')]}\'','')
+        data = json.loads(removed)
+
+        # Get the list of extensions
+        list_extensions = data[0][1][1]
+#       
+        for each_extension in list_extensions:
+            name = each_extension[1]
+        # print()
+        # print(data)
+        # yield {
+        #     "name": each[1]
+        # }
+# list_extensions[1][1]
+        with open('aaa.json', 'w') as jsonfile:
+	        json.dump(len(list_extensions), jsonfile)

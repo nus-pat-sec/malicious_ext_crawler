@@ -164,3 +164,5 @@ malicious_ext_crawler/.DS_Store
 malicious_ext_crawler/malicious_ext_crawler/.DS_Store
 data_analysis/cleaned_seven_months_data.csv
 malicious_ext_crawler/selected_extensions.json
+chrome_web_store_crawler/chrome_extensions.json
+malicious_ext_crawler/chrome.json
