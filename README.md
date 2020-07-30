@@ -1,5 +1,5 @@
 
-# Malicious browser extensions crawler
+# Malicious browser extensions crawler (Experimental)
 
 Malicious browser extensions crawler is a Python-based crawler
 
