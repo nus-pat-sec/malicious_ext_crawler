@@ -27,30 +27,41 @@ class ChromeExtensions(scrapy.Spider):
     }
 
     def start_requests(self):
-        url = 'https://chrome.google.com/webstore/ajax/item?hl=en&gl=AU&pv=20200420&mce=atf%2Cpii%2Crtr%2Crlb%2Cgtc%2Chcn%2Csvp%2Cwtd%2Chap%2Cnma%2Cdpb%2Car2%2Cc3d%2Cncr%2Cctm%2Cac%2Chot%2Cmac%2Cepb%2Cfcf%2Crma&count=100&category=extensions&searchTerm=ledger&sortBy=0&container=CHROME&_reqid=139507&rt=j'
+        # list of crawled_extensions
+        list_crawled_ext = []
+        # list of urls
+        urls = []
+        # Path to keywords.csv
+        path_keywords_csv = '/Users/thanhtrv/Documents/work/2020/winter_research_2020/malicious_browser_extensions_scrapy/malicious_ext_crawler/malicious_ext_crawler/spiders/keywords.csv'
+        # READ and GENERATE urls with keywords 
+        with open(path_keywords_csv, mode='r', encoding='utf-8-sig') as csv_file:
+            data = csv.reader(csv_file)
+            for row_keyword in data:
+                url1 = 'https://chrome.google.com/webstore/ajax/item?hl=en&gl=AU&pv=20200420&mce=atf%2Cpii%2Crtr%2Crlb%2Cgtc%2Chcn%2Csvp%2Cwtd%2Chap%2Cnma%2Cdpb%2Car2%2Cc3d%2Cncr%2Cctm%2Cac%2Chot%2Cmac%2Cepb%2Cfcf%2Crma&count=100&category=extensions&searchTerm='
+                url2 = '%s&sortBy=0&container=CHROME&_reqid=139507&rt=j' % row_keyword[0]
+                combined_keyword_url = url1+url2
+                urls.append(combined_keyword_url)
+        # SEND and REQUEST the urls using selenium driver/chrome
+        for url in urls:
+            request_temp = scrapy.Request(url, method='POST', callback=self.parseapi, headers = self.headers, cb_kwargs={'list_crawled_ext':list_crawled_ext})
+        
+            yield request_temp
+            
+        # export file to json
+        
+            # jsonfile.write('\n')
 
-        yield scrapy.Request(url, method='POST', callback=self.parseapi, headers = self.headers)
-
-    # def parse(self, response):
-    #     # Chrome store API only return 20 results per request.
-    #     url = 'https://chrome.google.com/webstore/ajax/item?hl=en&gl=AU&pv=20200420&mce=atf%2Cpii%2Crtr%2Crlb%2Cgtc%2Chcn%2Csvp%2Cwtd%2Chap%2Cnma%2Cdpb%2Car2%2Cc3d%2Cncr%2Cctm%2Cac%2Chot%2Cmac%2Cepb%2Cfcf%2Crma&count=100&category=extensions&searchTerm=ledger&sortBy=0&container=CHROME&_reqid=139507&rt=j'
-    #     request =  scrapy.Request(url, method='POST', callback=self.parseapi, headers = self.headers)
-    #     yield request
-
-    def parseapi(self, response):
+    def parseapi(self, response, list_crawled_ext):
         raw_data = response.body.decode("utf-8")
         removed = raw_data.replace(')]}\'','')
         data = json.loads(removed)
         # Get the list of extensions
         list_extensions = data[0][1][1]
-        list_form = []
+        
         
         # 20 for each request
         for each_extension in list_extensions:
-            # previous_data = {
-            #     "a": "0",
-            #     "id_ex": "NaN"  
-            # }
+
             id_ex = each_extension[0]
             key = each_extension[61]
             name = each_extension[1]
@@ -65,9 +76,7 @@ class ChromeExtensions(scrapy.Spider):
                 soup = BeautifulSoup(r.content, 'html.parser')
                 # title = soup.title.text
                 last_updated = soup.find('span', class_='C-b-p-D-Xe h-C-b-p-D-xh-hh').text
-            #     details_link = response.urljoin(details_link)
-                # request_temp = scrapy.Request(details_link, callback=self.parse_extension, cb_kwargs={'previous_data':previous_data})
-                # yield request_temp
+ 
                 formated_last_updated = dparser.parse(last_updated,fuzzy=True)
 
             
@@ -84,17 +93,13 @@ class ChromeExtensions(scrapy.Spider):
 
             }
 
-            list_form.append(ext)
-#         # print()
-#         # print(data)
-#         # yield {
-#         #     "name": each[1]
-#         # }
-# list_extensions[1][1]
-        with open('aaa.json', 'w') as jsonfile:
-            # a = (*list_form,sep='\n')
-            json.dump(list_form, jsonfile, indent=2)
-            # jsonfile.write('\n')
+            list_crawled_ext.append(ext)
+
+            # Export all
+        with open('chrome_extensions_meta.json', 'w') as jsonfile:
+                json.dump(list_crawled_ext, jsonfile, indent=2)
+
+        
     
     
     
