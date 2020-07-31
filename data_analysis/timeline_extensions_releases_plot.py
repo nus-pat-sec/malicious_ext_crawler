@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 last_seven_months = [0, 0, 0, 0, 0, 0, 0]
 
-with open('/Users/thanhtrv/Documents/work/2020/winter_research_2020/malicious_browser_extensions_scrapy/malicious_ext_crawler/meta_extensions.json') as json_file:
+with open('/home/students/s4544688/research_2020/malicious_ext_crawler/malicious_ext_crawler/output_data/combined.json') as json_file:
     data_dict = json.load(json_file)
 
     
