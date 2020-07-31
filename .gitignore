@@ -158,3 +158,17 @@ malicious_ext_crawler/output_data/sub_data_*.json
 malicious_ext_crawler/output_data/combined.json
 malicious_ext_crawler/full_kw_ext*.json
 malicious_ext_crawler/test_ext.json
+
+data_analysis/cleaned_data.csv
+data_analysis/cleaned_data.json
+data_analysis/combined.json
+data_analysis/full_ext.json
+malicious_ext_crawler/.DS_Store
+data_analysis/fancy_cleaned_data.csv
+.DS_Store
+malicious_ext_crawler/.DS_Store
+malicious_ext_crawler/malicious_ext_crawler/.DS_Store
+data_analysis/cleaned_seven_months_data.csv
+malicious_ext_crawler/selected_extensions.json
+chrome_web_store_crawler/chrome_extensions.json
+malicious_ext_crawler/chrome.json

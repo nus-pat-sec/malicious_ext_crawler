@@ -3,28 +3,31 @@ import scrapy_selenium
 from scrapy_selenium import SeleniumRequest
 import pandas as pd
 import re
-
+import json
 import csv
 
 
 class ChromeExtensions(scrapy.Spider):
     # Name of this spider
     name = 'chrome_extensions'
-    def start_requests(self):
-        # List of urls for crawling
-        urls = []
-        # Path to keywords.csv
-        path_keywords_csv = '/Users/thanhtrv/Documents/work/2020/winter_research_2020/malicious_browser_extensions_scrapy/malicious_ext_crawler/malicious_ext_crawler/spiders/keywords.csv'
-        # READ and GENERATE urls with keywords 
-        with open(path_keywords_csv, mode='r', encoding='utf-8-sig') as csv_file:
-            data = csv.reader(csv_file)
-            for row_keyword in data:
-                combined_keyword_url = 'https://chrome.google.com/webstore/search/%s?hl=en&_category=extensions' % row_keyword[0]
-                urls.append(combined_keyword_url)
-        # SEND and REQUEST the urls using selenium driver/chrome
-        for url in urls:
-            yield scrapy_selenium.SeleniumRequest(url=url, callback=self.parse)
+    start_urls = ['https://chrome.google.com/webstore/search/ledger?hl=en']
+    headers = {
+        "Accept": "*/*",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Content-Length": "0",
 
+    }
 
     def parse(self, response):
-        print(response.css('title::text').get())
+        url = 'https://chrome.google.com/webstore/ajax/item?hl=en&gl=AU&pv=20200420&mce=atf%2Cpii%2Crtr%2Crlb%2Cgtc%2Chcn%2Csvp%2Cwtd%2Chap%2Cnma%2Cdpb%2Car2%2Cc3d%2Cncr%2Cctm%2Cac%2Chot%2Cmac%2Cepb%2Cfcf%2Crma&count=112&searchTerm=ledger&sortBy=0&container=CHROME&_reqid=180379&rt=j'
+        request = scrapy.Request(url, method='POST', callback=self.parse_api, headers = self.headers)
+
+        yield request
+
+    def parse_api(self, response):
+        raw_data = response.body
+        data = json.load(raw_data)
+        
+        yield {
+            data
+        }
