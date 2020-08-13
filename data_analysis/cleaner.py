@@ -14,7 +14,9 @@ def f_wo_case(substring, main_string):
     return False
 
 cleaned_data = []
-with open('combined.json') as json_file:
+# with open('combined.json') as json_file:
+#     data_dict = json.load(json_file)
+with open('chrome_ext_data.json') as json_file:
     data_dict = json.load(json_file)
 
     
@@ -51,11 +53,15 @@ with open('combined.json') as json_file:
 
 
 
-with open('cleaned_data.json', 'w') as cleaned_json:
+# with open('cleaned_data.json', 'w') as cleaned_json:
+# 	json.dump(cleaned_data, cleaned_json)
+with open('chrome_cleaned_data.json', 'w') as cleaned_json:
 	json.dump(cleaned_data, cleaned_json)
 
-csv_columns = ['platform','key','name', 'rating', 'user_numbers', 'creator', 'last_updated', 'reviews']
-csv_file = "cleaned_data.csv"
+# csv_columns = ['platform','key','name', 'rating', 'user_numbers', 'creator', 'last_updated', 'reviews']
+# csv_file = "cleaned_data.csv"
+csv_columns = ['platform', 'id', 'key','name', 'rating', 'user_numbers', 'creator', 'last_updated']
+csv_file = "chrome_cleaned_data.csv"
 
 with open(csv_file, 'w') as csvfile:
     writer = csv.DictWriter(csvfile, fieldnames=csv_columns)

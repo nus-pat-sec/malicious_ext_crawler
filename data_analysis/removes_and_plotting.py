@@ -26,7 +26,8 @@ def export_csv(filter_cleaned_data,csv_file):
    
     final_data = remove_dup_list_dic(filter_cleaned_data)
     
-    csv_columns = ['platform','key','name', 'rating', 'user_numbers', 'creator', 'last_updated', 'reviews']
+    # csv_columns = ['platform','key','name', 'rating', 'user_numbers', 'creator', 'last_updated', 'reviews']
+    csv_columns = ['platform', 'id', 'key','name', 'rating', 'user_numbers', 'creator', 'last_updated']
 
     with open(csv_file, 'w') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
@@ -85,10 +86,17 @@ def processing(input_file):
 
 
 x_units = [1, 2, 3, 4, 5, 6, 7]
-y_1 = processing("cleaned_data.json")
+# y_1 = processing("cleaned_data.json")
+
+y_1 = processing("chrome_cleaned_data.json")
 # export csv
-export_csv(y_1[1],"cleaned_seven_months_data.csv")
-y_2 = processing("combined.json")
+# export_csv(y_1[1],"cleaned_seven_months_data.csv")
+export_csv(y_1[1],"cleaned_seven_months_data_chrome.csv")
+
+
+# y_2 = processing("combined.json")
+y_2 = processing("chrome_ext_data.json")
+
 
 f = plt.figure(1)
 # two figure
