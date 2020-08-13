@@ -32,7 +32,7 @@ class ChromeExtensions(scrapy.Spider):
         # list of urls
         urls = []
         # Path to keywords.csv
-        path_keywords_csv = '/Users/thanhtrv/Documents/work/2020/winter_research_2020/malicious_browser_extensions_scrapy/malicious_ext_crawler/malicious_ext_crawler/spiders/keywords.csv'
+        path_keywords_csv = 'chrome_web_store_crawler/spiders/all_keywords.csv'
         # READ and GENERATE urls with keywords 
         with open(path_keywords_csv, mode='r', encoding='utf-8-sig') as csv_file:
             data = csv.reader(csv_file)
