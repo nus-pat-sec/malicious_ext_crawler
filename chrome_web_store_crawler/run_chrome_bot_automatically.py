@@ -205,7 +205,8 @@ while True:
     ######RUN-BOT
     # run scrapy through command line
     # print to std out the result for debugging comment this if you want.
-    # result = subprocess.run(['scrapy', 'crawl', 'chrome_extensions', name_exported_file ], stdout=subprocess.PIPE)
+    result = subprocess.run(['scrapy', 'crawl', 'chrome_extensions', name_exported_file ], stdout=subprocess.PIPE)
+    # PRINT to STD the process of scrapy bot
     # print(result.stdout.decode('utf-8'))
     
     # after run bot run filter using keyword
@@ -240,6 +241,6 @@ while True:
     print("Finished the WHOLE process at", datetime.datetime.now(), file=open("log.txt", "a"))
     print("Started to wait 8 hours at", datetime.datetime.now(), file=open("log.txt", "a"))
     time.sleep(28800) #sleep for 8 hour then repeat
-# print a newline between each time after running bot.
+    # print a newline between each time after running bot.
     print("+++++++++++++++++++++++++++++++++++++++++++++++++\n", file=open("log.txt", "a"))
 
