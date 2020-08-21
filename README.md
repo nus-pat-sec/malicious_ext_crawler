@@ -43,7 +43,7 @@ NaH
 * Website: https://thanhtrv.github.io/
 * Twitter: [@thanhtrv](https://twitter.com/thanhtrv)
 * Github: [@thanhtrv](https://github.com/thanhtrv)
-* LinkedIn: [@thanhtr](https://linkedin.com/in/thanhtr)
+* LinkedIn: [@thanhtr](https://linkedin.com/in/thanhtrv)
 
 ## 🤝 Contributing
 
