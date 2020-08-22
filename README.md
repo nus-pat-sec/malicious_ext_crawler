@@ -63,4 +63,3 @@ Copyright © 2020 [thanhtrv](https://github.com/thanhtrv).<br />
 This project is [NaH](NaH) licensed.
 
 ***
-_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_

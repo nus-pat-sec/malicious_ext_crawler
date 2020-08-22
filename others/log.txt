@@ -1,0 +1,10 @@
+Started program at 2020-08-13 16:30:04.057134
+*Bot is working....
+Finished the WHOLE process at 2020-08-13 16:30:04.069738
+Started to wait 8 hours at 2020-08-13 16:30:04.069972
+Started program at 2020-08-13 16:30:26.776423
+*Bot is working....
+Finished the WHOLE process at 2020-08-13 16:30:26.780717
+Started to wait 8 hours at 2020-08-13 16:30:26.780953
+Started program at 2020-08-13 16:30:37.897197
+*Bot is working....
