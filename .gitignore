@@ -137,6 +137,13 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
+# Data
+chrome_web_store_crawler/chrome_web_store_crawler/chrome_data_analysis/data
+
+chrome_web_store_crawler/log.txt
+
+
+
 # Exclude exported data
 selenium_project/export_dataframe.csv
 malicious_ext_crawler/malicious_ext_crawler/export_dataframe.csv
@@ -172,3 +179,7 @@ data_analysis/cleaned_seven_months_data.csv
 malicious_ext_crawler/selected_extensions.json
 chrome_web_store_crawler/chrome_extensions.json
 malicious_ext_crawler/chrome.json
+
+
+
+

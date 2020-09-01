@@ -13,7 +13,7 @@ with open('/home/students/s4544688/research_2020/malicious_ext_crawler/malicious
     for p in data_dict:
 
         date_type = dparser.parse(p["last_updated"],fuzzy=True)
-        if (date_type.year == 2019):
+        if (date_type.year == 2020):
             # Jan
             if (date_type.month == 1):
                 last_seven_months[0] = last_seven_months[0] + 1
