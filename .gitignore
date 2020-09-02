@@ -147,6 +147,9 @@ malicious_ext_crawler/old_output_data
 
 
 # Exclude exported data
+# Ignore .vscode
+.vscode
+################### Exclude exported data
 selenium_project/export_dataframe.csv
 malicious_ext_crawler/malicious_ext_crawler/export_dataframe.csv
 malicious_ext_crawler/extensions.json
