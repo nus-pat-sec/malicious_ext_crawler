@@ -141,7 +141,9 @@ cython_debug/
 chrome_web_store_crawler/chrome_web_store_crawler/chrome_data_analysis/data
 
 chrome_web_store_crawler/log.txt
-
+malicious_ext_crawler/malicious_ext_crawler/data
+malicious_ext_crawler/malicious_ext_crawler/spiders/input_data
+malicious_ext_crawler/old_output_data
 
 
 # Exclude exported data
